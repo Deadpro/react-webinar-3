@@ -71,8 +71,6 @@ class Store {
     selectItem(code) {
         if (sessionStorage.getItem(code) === null) {
             sessionStorage.setItem(code, 1);
-        } else {
-            sessionStorage.setItem(code, parseInt(sessionStorage.getItem(code)) + 1);
         }
 
         let selectionCounterText = " | Выделяли " + sessionStorage.getItem(code) + " раз";
@@ -80,8 +78,10 @@ class Store {
         this.setState({            
             ...this.state,
             list: this.state.list.map(item => {
-                if (item.code === code) {
+                if (item.code === code) {                    
                     item.selected = !item.selected;
+                    if (item.selected === false)
+                        sessionStorage.setItem(code, parseInt(sessionStorage.getItem(code)) + 1);
                     let insertText = "";
                     if (item.title.search("Выделяли") > 0) {
                         insertText = item.title.substring(0, item.title.search("Выделяли")-2) + selectionCounterText;
